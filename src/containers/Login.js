@@ -1,13 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import {ValidateValue} from "../commons/Utils";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -46,7 +45,61 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignIn() {
+const validateLogin = ()=>{
+    
+}
+
+const SignIn= ()=> {
+    const [myForm,updateForm]= useState({
+        data:{
+            username:{
+                value: '',
+                clicked:false,
+                error:true
+            },
+            password:{
+                value:'',
+                clicked:false,
+                error:true
+            }
+        },
+        error:false,
+        ok:false,
+        loading:true
+    });
+
+    const updateValue= (event,identifier,type)=>{
+        event.preventDefault();
+        const parent = {...myForm};
+        const origin= {...parent['data']};
+        const element = {...origin[identifier]}
+        element.value = event.target.value;
+        element.error = ValidateValue(event.target.value,type);
+        element.clicked = true;
+        origin[identifier]= element;
+        parent['data']=origin;
+        parent.error=activateButton(origin);
+        updateForm (parent);
+    };
+
+    const getError = (identifier)=>{
+        const origin= {...myForm.data};
+        const element = {...origin[identifier]};
+        return element.error && element.clicked;
+    };
+
+    const activateButton=(data)=>{
+        const origin= data;
+        let error = true;
+        for (let element in origin){
+            if (origin[element].error===true){
+                error =false;
+            }
+
+        }
+        return error;
+    };
+
     const classes = useStyles();
 
     return (
@@ -59,7 +112,7 @@ export default function SignIn() {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form className={classes.form} noValidate onSubmit={validateLogin}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -70,6 +123,7 @@ export default function SignIn() {
                         name="email"
                         autoComplete="email"
                         autoFocus
+                        onChange={(event)=>updateValue(event,'username','number')}
                     />
                     <TextField
                         variant="outlined"
@@ -81,10 +135,7 @@ export default function SignIn() {
                         type="password"
                         id="password"
                         autoComplete="current-password"
-                    />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
+                        onChange={(event)=>updateValue(event,'password','string')}
                     />
                     <Button
                         type="submit"
