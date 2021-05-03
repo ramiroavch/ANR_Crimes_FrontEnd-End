@@ -11,6 +11,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {Redirect} from 'react-router-dom';
+import {useSelector, useDispatch} from 'react-redux';
+import * as actionsType from '../store/action';
 
 function Copyright() {
     return (
@@ -45,11 +48,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const validateLogin = ()=>{
-    
-}
-
-const SignIn= ()=> {
+const Login= ()=> {
+    const userName= useSelector(state => state.loginReducer);
     const [myForm,updateForm]= useState({
         data:{
             username:{
@@ -65,9 +65,10 @@ const SignIn= ()=> {
         },
         error:false,
         ok:false,
-        loading:true
+        loading:true,
+        redirect:false,
     });
-
+    const dispatch = useDispatch();
     const updateValue= (event,identifier,type)=>{
         event.preventDefault();
         const parent = {...myForm};
@@ -81,6 +82,12 @@ const SignIn= ()=> {
         parent.error=activateButton(origin);
         updateForm (parent);
     };
+
+    const validateLogin = (event)=>{
+        event.preventDefault();
+        dispatch({type: actionsType.LOGIN, val:myForm.data.username.value});
+        myForm.redirect=true;
+    }
 
     const getError = (identifier)=>{
         const origin= {...myForm.data};
@@ -102,6 +109,10 @@ const SignIn= ()=> {
 
     const classes = useStyles();
 
+
+    if(myForm.redirect===true){
+        return (<Redirect to={"/dashboard"} /> )
+    }
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -165,4 +176,7 @@ const SignIn= ()=> {
             </Box>
         </Container>
     );
-}
+};
+
+
+export default Login;
