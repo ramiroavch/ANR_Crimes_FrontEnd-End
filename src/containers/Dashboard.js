@@ -133,7 +133,7 @@ export default function Dashboard() {
             <CssBaseline />
             <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
                 <Toolbar className={classes.toolbar}>
-                    <IconButton
+                    {/* <IconButton
                         edge="start"
                         color="inherit"
                         aria-label="open drawer"
@@ -141,15 +141,15 @@ export default function Dashboard() {
                         className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
                     >
                         <MenuIcon />
-                    </IconButton>
+                    </IconButton>*/}
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         Dashboard
                     </Typography>
-                    <IconButton color="inherit">
+                    {/* <IconButton color="inherit">
                         <Badge badgeContent={4} color="secondary">
                             <NotificationsIcon />
                         </Badge>
-                    </IconButton>
+                    </IconButton> */}
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -176,21 +176,43 @@ export default function Dashboard() {
                         {/* Chart */}
                         <Grid item xs={12} md={8} lg={9}>
                             <Paper className={fixedHeightPaper}>
-                                <Chart />
+                                <Chart
+                                    title = "Crimes By Date"
+                                    yLabel= "Crimes (Y)"
+                                    xLabel= "Date (X)"
+                                />
                             </Paper>
                         </Grid>
-                        {/* Recent Deposits */}
+                        <Grid item xs={12} md={8} lg={9}>
+                            <Paper className={fixedHeightPaper}>
+                                <Chart
+                                    title = "Crimes By State"
+                                    yLabel= "Crimes (Y)"
+                                    xLabel= "State (X)"
+                                />
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12} md={8} lg={9}>
+                            <Paper className={fixedHeightPaper}>
+                                <Chart
+                                    title = "Crimes By Week Day"
+                                    yLabel= "Crimes (Y)"
+                                    xLabel= "w/ Day (X)"
+                                />
+                            </Paper>
+                        </Grid>
+                        {/* Recent Deposits
                         <Grid item xs={12} md={4} lg={3}>
                             <Paper className={fixedHeightPaper}>
                                 <Deposits />
                             </Paper>
-                        </Grid>
-                        {/* Recent Orders */}
+                        </Grid> */}
+                        {/* Recent Orders
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
                                 <Orders />
                             </Paper>
-                        </Grid>
+                        </Grid> */}
                     </Grid>
                     <Box pt={4}>
                         <Copyright />

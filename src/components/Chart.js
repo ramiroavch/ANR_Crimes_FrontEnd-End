@@ -20,30 +20,38 @@ const data = [
     createData('24:00', undefined),
 ];
 
-export default function Chart() {
+export default function Chart(props) {
     const theme = useTheme();
 
     return (
         <React.Fragment>
-            <Title>Today</Title>
+            <Title>{props.title}</Title>
             <ResponsiveContainer>
                 <LineChart
                     data={data}
                     margin={{
                         top: 16,
                         right: 16,
-                        bottom: 0,
+                        bottom: 15,
                         left: 24,
                     }}
                 >
-                    <XAxis dataKey="time" stroke={theme.palette.text.secondary} />
+                    <XAxis dataKey="time" stroke={theme.palette.text.secondary}>
+                        <Label
+                            style={{ textAnchor: 'insideBottomLeft', fill: theme.palette.text.primary }}
+                            position="insideBottomLeft"
+                            offset= {-10}
+                        >
+                            {props.xLabel}
+                        </Label>
+                    </XAxis>
                     <YAxis stroke={theme.palette.text.secondary}>
                         <Label
                             angle={270}
                             position="left"
                             style={{ textAnchor: 'middle', fill: theme.palette.text.primary }}
                         >
-                            Sales ($)
+                            {props.yLabel}
                         </Label>
                     </YAxis>
                     <Line type="monotone" dataKey="amount" stroke={theme.palette.primary.main} dot={false} />
