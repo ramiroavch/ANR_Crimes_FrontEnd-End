@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 const instance = Axios.create({
-    baseURL:process.env.BASE_URL_BACK
+    baseURL:process.env.REACT_APP_API_URL
 })
 
 

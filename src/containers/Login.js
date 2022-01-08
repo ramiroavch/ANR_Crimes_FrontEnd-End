@@ -13,7 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {Redirect} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
-import * as actionsType from '../store/action';
+import axios from "../Axios";
 
 function Copyright() {
     return (
@@ -49,7 +49,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login= ()=> {
-    const userName= useSelector(state => state.loginReducer);
+    let actualizarEstado = (data) => {
+        updateForm(Object.assign({}, myForm, data));
+    };
     const [myForm,updateForm]= useState({
         data:{
             username:{
@@ -83,10 +85,31 @@ const Login= ()=> {
         updateForm (parent);
     };
 
-    const validateLogin = (event)=>{
+    const validateLogin = async(event)=>{
         event.preventDefault();
-        dispatch({type: actionsType.LOGIN, val:myForm.data.username.value});
-        myForm.redirect=true;
+        try {
+            actualizarEstado({
+                loading: true
+            })
+            await axios.post('/api/token',
+                {
+                    "username": myForm.data.username,
+                    "password": myForm.data.password
+                }
+            ).then((response)=>{
+                return(<Redirect to={"/dashboard"}/>);
+            }).catch((error)=>{
+                actualizarEstado({
+                        response:error
+                    }
+                )
+            });
+
+        } catch (err){
+            actualizarEstado({
+                loading:false
+            });
+        }
     }
 
     const getError = (identifier)=>{
@@ -164,7 +187,7 @@ const Login= ()=> {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link href="#" variant="body2">
+                            <Link href="/register" to="/register" variant="body2">
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>
