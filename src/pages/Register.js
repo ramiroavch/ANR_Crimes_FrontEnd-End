@@ -11,10 +11,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {Redirect} from 'react-router-dom';
-import axios from '../Axios.js';
-import Spinner from '../components/spinner/Spinner.js';
+import axios from '../axios.js';
 import CustomModal from '../components/modal/CustomModal';
+import {useHistory} from "react-router-dom";
 
 function Copyright() {
     return (
@@ -47,9 +46,14 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    bodyModal:{
+        margin:0,
+        paddingTop:theme.spacing(2)
+    }
 }));
 
 const Register= ()=> {
+    const history = useHistory();
     const [modal,setModal] = useState (false);
     const handleModal = ()=>{
         setModal(!modal);
@@ -87,7 +91,11 @@ const Register= ()=> {
                 error:true
             }
         },
-        response:{},
+        modal:{
+            title:'',
+            message:'',
+            buttonMessage:''
+        },
         error:false,
         ok:false,
         loading:false,
@@ -127,13 +135,15 @@ const Register= ()=> {
                 }
             ).then((response)=>{
                 myForm.redirect = true;
-                setModal(true);
-                return(<Redirect to={"/login"}/>);
-            }).catch((error)=>{
+                history.push("/login");
+            }).catch(({response})=>{
                 actualizarEstado({
-                        response:error
+                    modal:{
+                        title:'Error create new user',
+                        message:response.data.error??'',
                     }
-                )
+                })
+                setModal(true);
             });
 
         } catch (err){
@@ -163,7 +173,6 @@ const Register= ()=> {
 
     const classes = useStyles();
     return (
-        myForm.loading  ? <Spinner/> :
         <div>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
@@ -249,12 +258,12 @@ const Register= ()=> {
                                     margin="none"
                                     required
                                     fullWidth
-                                    name="password"
-                                    label="Password"
+                                    name="confirm_password"
+                                    label="Confirm Password"
                                     type="password"
-                                    id="password"
+                                    id="confirm_password"
                                     autoComplete="current-password"
-                                    onChange={(event)=>updateValue(event,'password','string')}
+                                    onChange={(event)=>updateValue(event,'confirm_password','string')}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -285,8 +294,9 @@ const Register= ()=> {
             <CustomModal
                 open = {modal}
                 handleClose = {handleModal}
-                title = {"hola"}
+                title = {myForm.modal.title}
             >
+                <p className={classes.bodyModal}>{myForm.modal.message}</p>
             </CustomModal>
         </div>
     );

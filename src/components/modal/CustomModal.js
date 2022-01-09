@@ -15,23 +15,30 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
-        minWidth: '30%',
-        minHeight: '20%'
+        minWidth: '450px',
+        maxWidth: '70%',
+        padding: theme.spacing(2),
     },
-    title: {
-        padding: theme.spacing(1, 2, 1),
+    header: {
+        width:"100%",
+        display:"flex",
+        justifyContent:"space-between",
     },
-    divider: {
-        padding: theme.spacing(0, 1, 0, 1),
+    title:{
+        fontSize:theme.typography.h6.fontSize,
+        textTransform:"capitalize"
+    },
+    closeButton:{
+        cursor:"pointer"
     },
     body:{
-        padding: theme.spacing(1, 2, 1),
+
     }
 }));
 
 export default function CustomModal(props) {
     const classes = useStyles();
-    const { open, handleClose, title,message} = props;
+    const { open, handleClose, title} = props;
 
     return(
         <Modal
@@ -47,19 +54,13 @@ export default function CustomModal(props) {
         >
             <Fade in={open}>
                 <div className={classes.paper}>
-                    <div className={classes.title}>
-                    <Grid xs={12}>
-                        <h3>{title}</h3>
-                        {/*<IconButton onClick={handleClose}>*/}
-                        {/*    <CloseIcon />*/}
-                        {/*</IconButton>*/}
-                    </Grid>
+                    <div className={classes.header}>
+                        <h2 className={classes.title}>{title}</h2>
+                        <CloseIcon className={classes.closeButton} onClick={handleClose} />
                     </div>
-                    <Grid xs={12} className={classes.divider}>
-                        <Divider />
-                    </Grid>
-                    <Grid xs={12} className={classes.body}>
-                        <p id="transition-modal-description">{message}</p>
+                    <Divider />
+                    <Grid >
+                        {props.children}
                     </Grid>
                 </div>
             </Fade>
