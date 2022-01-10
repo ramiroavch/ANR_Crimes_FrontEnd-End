@@ -4,7 +4,6 @@ import Dashboard from "../Dashboard";
 
 export default function Admin() {
     let {path} = useRouteMatch();
-    console.log(path)
     return (
         <Switch>
             <Route exact path={`${path}/dashboard`} component={Dashboard}/>

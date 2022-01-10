@@ -19,6 +19,9 @@ import { mainListItems, secondaryListItems } from '../components/ListItems';
 import Chart from '../components/Chart';
 import {Button} from "@material-ui/core";
 import {useDispatch} from "react-redux";
+import {logout} from "../store/slices/userSlice";
+import {useHistory} from "react-router-dom";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 function Copyright() {
     return (
@@ -115,11 +118,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard() {
+    const history = useHistory();
     const dispatch = useDispatch();
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const handleLogout = () => {
-
+        dispatch(logout());
+        history.push("/login");
     }
     const handleDrawerClose = () => {
         setOpen(false);
@@ -134,7 +139,8 @@ export default function Dashboard() {
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         Dashboard
                     </Typography>
-                    <Button>
+                    <Button onClick={handleLogout} variant="contained" disableElevation>
+                        <ExitToAppIcon/>
                         Logout
                     </Button>
                 </Toolbar>

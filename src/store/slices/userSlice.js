@@ -1,7 +1,17 @@
 import {createSlice} from "@reduxjs/toolkit";
-import axios from '../../axios'
+import axios from '../../axios';
+import {browserHistory} from "../../index";
+
 
 const refreshTime = 5/60 // minutes
+
+const addToken = (token) => {
+    axios.defaults.headers.Authorization = `Bearer ${token}`
+}
+
+const removeToken = () => {
+    axios.defaults.headers.Authorization = undefined
+}
 
 export const userSlice = createSlice({
     name: 'user',
@@ -15,6 +25,7 @@ export const userSlice = createSlice({
         startSession: (state, {payload}) => {
             state.accessToken = payload.accessToken
             state.refreshToken = payload.refreshToken
+            addToken(payload.accessToken)
         },
         setRefreshTimeout: (state, {payload}) => {
             state.refreshTimeout = payload.refreshTimeout
@@ -22,6 +33,7 @@ export const userSlice = createSlice({
         clearSession(state) {
             state.accessToken = null
             state.refreshToken = null
+            removeToken()
             clearTimeout(state.refreshTimeout)
             localStorage.removeItem('refresh')
         }
@@ -63,7 +75,6 @@ export const checkSession = () => async (dispatch) => {
 }
 
 export const refreshSession = () => (dispatch, getState) => {
-    console.log(getState)
     const refreshToken = getState.user?.refresh ?? localStorage.getItem('refresh');
     if (!refreshToken) {
         dispatch(clearSession())
@@ -75,7 +86,8 @@ export const refreshSession = () => (dispatch, getState) => {
             dispatch(startRefreshSession())
         })
         .catch(() => {
-            dispatch(clearSession())
+            dispatch(clearSession());
+            browserHistory.push('/login');
         })
 }
 
@@ -92,6 +104,5 @@ export const logout = () => async(dispatch) => {
 }
 
 export const selectIsLogged = state => Boolean(state.user.accessToken && state.user.refreshToken)
-
 
 export default userSlice.reducer;
