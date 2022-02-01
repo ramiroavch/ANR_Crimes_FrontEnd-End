@@ -2,19 +2,19 @@ import {Redirect, Route} from "react-router-dom";
 import {selectIsLogged} from "../../store/slices/userSlice";
 import {useSelector} from "react-redux";
 
-const PrivateRoute = ({ children, ...rest }) => {
+const PublicRoute = ({ children, ...rest }) => {
     const isLogged = useSelector(selectIsLogged);
     return (
-        isLogged?
-        <Route
-            {...rest}
-            render={children}
-        />: <Redirect
+        !isLogged?
+            <Route
+                {...rest}
+                render={children}
+            />: <Redirect
                 to={{
-                    pathname: "/public/login",
+                    pathname: "/admin/dashboard",
                 }}
             />
     );
 }
 
-export default PrivateRoute
+export default PublicRoute

@@ -3,7 +3,7 @@ import axios from '../../axios';
 import {browserHistory} from "../../index";
 
 
-const refreshTime = 5/60 // minutes
+const refreshTime = 5 // minutes
 
 const addToken = (token) => {
     axios.defaults.headers.Authorization = `Bearer ${token}`
