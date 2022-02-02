@@ -3,10 +3,20 @@ import IconButton from "@material-ui/core/IconButton";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
-import {mainListItems, secondaryListItems} from "./ListItems";
 import Drawer from "@material-ui/core/Drawer";
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
+import ListItem from "@material-ui/core/ListItem";
+import {Link} from "react-router-dom";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import ListItemText from "@material-ui/core/ListItemText";
+import MapIcon from "@material-ui/icons/Map";
+import BarChartIcon from "@material-ui/icons/BarChart";
+import {useSelector} from "react-redux";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import AssignmentIcon from "@material-ui/icons/Assignment";
+import DeveloperBoardIcon from '@material-ui/icons/DeveloperBoard';
 
 const drawerWidth = 240;
 
@@ -41,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SideBar({open,handleOpen}){
+    const {user} = useSelector((state) => state.user)
     const classes = useStyles();
     return(
     <Drawer
@@ -56,9 +67,50 @@ export default function SideBar({open,handleOpen}){
             </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
+        <List>
+            <ListItem button component={Link} to={'/admin/dashboard'}>
+                <ListItemIcon>
+                    <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Dashboard" />
+            </ListItem>
+            <ListItem button component={Link} to={'/admin/map-prediction'}>
+                <ListItemIcon>
+                    <MapIcon />
+                </ListItemIcon>
+                <ListItemText primary="Predict On Map" />
+            </ListItem>
+            <ListItem button component={Link} to={'/admin/heat-map'}>
+                <ListItemIcon>
+                    <BarChartIcon />
+                </ListItemIcon>
+                <ListItemText primary="Heat Map"/>
+            </ListItem>
+        </List>
         <Divider/>
-        {/*<List>{secondaryListItems}</List>*/}
+        {user.username === "su" ?
+            <List>
+                <ListSubheader inset>Admin Modules</ListSubheader>
+                <ListItem button component={Link} to={'/admin/retrain'}>
+                    <ListItemIcon>
+                        <DeveloperBoardIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary="Retrain IA"/>
+                </ListItem>
+                <ListItem button>
+                    <ListItemIcon>
+                        <AssignmentIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary="Insert New Crime"/>
+                </ListItem>
+                <ListItem button component={Link} to={'/admin/users'}>
+                    <ListItemIcon>
+                        <AssignmentIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary="Manage Users"/>
+                </ListItem>
+            </List>:null
+        }
     </Drawer>
     )
 }

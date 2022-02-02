@@ -15,6 +15,10 @@ import SideBar from "../../components/SideBar";
 import Container from "@material-ui/core/Container";
 import PredictionMap from "../PredictionMap";
 import PredictionsHeatMap from "../PredictionsHeatMap";
+import Retrain from "../Retrain";
+import ManageUser from "../ManageUser";
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import Register from "../Register";
 
 const drawerWidth = 240;
 
@@ -53,6 +57,9 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: theme.spacing(4),
         paddingBottom: theme.spacing(4),
     },
+    logoutButton: {
+        paddingLeft: 15,
+    }
 }));
 
 export default function Admin() {
@@ -63,6 +70,10 @@ export default function Admin() {
     const handleLogout = () => {
         dispatch(logout());
         history.push("/");
+    }
+
+    const handleRegister = () => {
+        history.push("/admin/register")
     }
     const handleDrawerClose = () => {
         setOpen(false);
@@ -78,7 +89,11 @@ export default function Admin() {
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         Big Brother IA
                     </Typography>
-                    <Button onClick={handleLogout} variant="contained" disableElevation>
+                    <Button onClick={handleRegister} variant="contained"disableElevation>
+                        <PersonAddIcon/>
+                        Register
+                    </Button>
+                    <Button onClick={handleLogout} variant="contained" color="secondary" disableElevation className={classes.logoutButton}>
                         <ExitToAppIcon/>
                         Logout
                     </Button>
@@ -95,6 +110,9 @@ export default function Admin() {
                         <Route exact path={`${path}/dashboard`} component={Dashboard}/>
                         <Route exact path={`${path}/map-prediction`} component={PredictionMap}/>
                         <Route exact path={`${path}/heat-map`} component={PredictionsHeatMap}/>
+                        <Route excat path={`${path}/retrain`} component={Retrain}/>
+                        <Route excat path={`${path}/users`} component={ManageUser}/>
+                        <Route exact path={`${path}/register`} component={Register}/>
                     </Switch>
                 </Container>
             </main>

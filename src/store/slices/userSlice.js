@@ -1,6 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 import axios from '../../axios';
 import {browserHistory} from "../../index";
+import jwtDecode from "jwt-decode";
 
 
 const refreshTime = 5 // minutes
@@ -25,6 +26,9 @@ export const userSlice = createSlice({
         startSession: (state, {payload}) => {
             state.accessToken = payload.accessToken
             state.refreshToken = payload.refreshToken
+            if(payload.user) {
+                state.user = payload.user
+            }
             addToken(payload.accessToken)
         },
         setRefreshTimeout: (state, {payload}) => {
@@ -36,6 +40,7 @@ export const userSlice = createSlice({
             removeToken()
             clearTimeout(state.refreshTimeout)
             localStorage.removeItem('refresh')
+            localStorage.removeItem('userData')
         }
     }
 })
@@ -56,12 +61,28 @@ export const login = (username, password) => async (dispatch) => {
         }
     )
     localStorage.setItem('refresh', data.refresh);
-    dispatch(startSession({accessToken: data.access, refreshToken: data.refresh}))
+    const decoded = (jwtDecode(data.access));
+    let response = await axios.get('/api/user/'+decoded.user_id+'/find/',
+        {
+            headers: { Authorization: `Bearer ${data.access}` }
+        }
+    )
+    const userData = response.data.data;
+    localStorage.setItem('userData',JSON.stringify(userData));
+    const user = {
+        id:userData.id,
+        username:userData.username,
+        email:userData.email,
+        firstName : userData.first_name,
+        lastName: userData.last_name
+    }
+    dispatch(startSession({user:user, accessToken: data.access, refreshToken: data.refresh}))
     dispatch(startRefreshSession())
 }
 
 export const checkSession = () => async (dispatch) => {
     const refreshToken = localStorage.getItem('refresh');
+    const userData = localStorage.getItem('userData');
     if (!refreshToken) {
         dispatch(clearSession())
         throw Error;
@@ -70,7 +91,7 @@ export const checkSession = () => async (dispatch) => {
         {
             "refresh": refreshToken
         })
-    dispatch(startSession({accessToken: data.access, refreshToken}))
+    dispatch(startSession({user:JSON.parse(userData),accessToken: data.access, refreshToken}))
     dispatch(startRefreshSession())
 }
 

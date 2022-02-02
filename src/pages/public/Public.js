@@ -9,7 +9,6 @@ export default function Public() {
     return (
         <Switch>
             <Route exact path={`${path}/login`} component={Login} />
-            <Route exact path={`${path}/register`} component={Register}/>
             <Route exact path={`${path}/dashboard`} component={Dashboard}/>
         </Switch>
     );
