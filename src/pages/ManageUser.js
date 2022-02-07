@@ -10,6 +10,10 @@ import Button from "@material-ui/core/Button";
 const useStyles = makeStyles((theme) => ({
     paragraph:{
         paddingTop:20
+    },
+    bodyModal: {
+        margin: 0,
+        paddingTop: theme.spacing(2)
     }
 }))
 
@@ -27,8 +31,8 @@ export default function ManageUser(){
         ).then(({data})=>{
             if(data.success===1) {
                 let dataUsers=[];
-                 data.data.forEach(function(value,indice,array){
-                     dataUsers[indice] = {
+                 data.data.forEach(function(value,index,array){
+                     dataUsers[index] = {
                          id:value.id,
                          username: value.username,
                          email: value.email,
@@ -89,7 +93,11 @@ export default function ManageUser(){
             editable: true,
         },
         {
-            field:'',
+            field:'actions',
+            headerName: 'Actions',
+            width: 150,
+            disableColumnMenu:true,
+            sortable:false,
             renderCell: (cellValues)=>{
                 return(
                     <Button
@@ -120,6 +128,7 @@ export default function ManageUser(){
                     columns={columns}
                     pageSize={5}
                     rowsPerPageOptions={[5]}
+                    disableColumnMenu={true}
                 />
             </div>
             <CustomModal

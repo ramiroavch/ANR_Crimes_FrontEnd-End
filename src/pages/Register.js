@@ -120,7 +120,7 @@ const Register= ()=> {
                 }
             ).then((response)=>{
                 myForm.redirect = true;
-                history.push("/login");
+                history.push("/admin/dashboard");
             }).catch(({response})=>{
                 actualizarEstado({
                     modal:{

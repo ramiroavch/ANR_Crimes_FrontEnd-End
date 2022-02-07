@@ -1,6 +1,3 @@
-import clsx from "clsx";
-import IconButton from "@material-ui/core/IconButton";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import Drawer from "@material-ui/core/Drawer";
@@ -17,6 +14,7 @@ import {useSelector} from "react-redux";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import DeveloperBoardIcon from '@material-ui/icons/DeveloperBoard';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 const drawerWidth = 240;
 
@@ -50,22 +48,17 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function SideBar({open,handleOpen}){
+export default function SideBar({open}){
     const {user} = useSelector((state) => state.user)
     const classes = useStyles();
     return(
     <Drawer
         variant="permanent"
         classes={{
-            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+            paper: classes.drawerPaper,
         }}
         open={open}
     >
-        <div className={classes.toolbarIcon}>
-            <IconButton onClick={handleOpen}>
-                <ChevronLeftIcon />
-            </IconButton>
-        </div>
         <Divider />
         <List>
             <ListItem button component={Link} to={'/admin/dashboard'}>
@@ -86,6 +79,12 @@ export default function SideBar({open,handleOpen}){
                 </ListItemIcon>
                 <ListItemText primary="Heat Map"/>
             </ListItem>
+            <ListItem button component={Link} to={'/admin/profile'}>
+                <ListItemIcon>
+                    <AccountBoxIcon />
+                </ListItemIcon>
+                <ListItemText primary="Profile"/>
+            </ListItem>
         </List>
         <Divider/>
         {user.username === "su" ?
@@ -96,12 +95,6 @@ export default function SideBar({open,handleOpen}){
                         <DeveloperBoardIcon/>
                     </ListItemIcon>
                     <ListItemText primary="Retrain IA"/>
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <AssignmentIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary="Insert New Crime"/>
                 </ListItem>
                 <ListItem button component={Link} to={'/admin/users'}>
                     <ListItemIcon>

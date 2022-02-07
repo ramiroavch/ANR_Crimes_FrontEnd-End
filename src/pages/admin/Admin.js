@@ -2,7 +2,7 @@ import React from 'react';
 import {Route, Switch, useHistory, useRouteMatch} from "react-router-dom";
 import Dashboard from "../Dashboard";
 import {makeStyles} from "@material-ui/core/styles";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../../store/slices/userSlice";
 import clsx from "clsx";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -19,6 +19,7 @@ import Retrain from "../Retrain";
 import ManageUser from "../ManageUser";
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Register from "../Register";
+import Profile from "../Profile";
 
 const drawerWidth = 240;
 
@@ -58,11 +59,12 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(4),
     },
     logoutButton: {
-        paddingLeft: 15,
+        marginLeft: 15,
     }
 }));
 
 export default function Admin() {
+    const {user} = useSelector((state) => state.user)
     const history = useHistory();
     const dispatch = useDispatch();
     const classes = useStyles();
@@ -89,10 +91,12 @@ export default function Admin() {
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         Big Brother IA
                     </Typography>
-                    <Button onClick={handleRegister} variant="contained"disableElevation>
-                        <PersonAddIcon/>
-                        Register
-                    </Button>
+                    { user.username === "su" ?
+                        <Button onClick={handleRegister} variant="contained" disableElevation>
+                            <PersonAddIcon/>
+                            Sign Up
+                        </Button>:null
+                    }
                     <Button onClick={handleLogout} variant="contained" color="secondary" disableElevation className={classes.logoutButton}>
                         <ExitToAppIcon/>
                         Logout
@@ -113,6 +117,7 @@ export default function Admin() {
                         <Route excat path={`${path}/retrain`} component={Retrain}/>
                         <Route excat path={`${path}/users`} component={ManageUser}/>
                         <Route exact path={`${path}/register`} component={Register}/>
+                        <Route exact path={`${path}/profile`} component={Profile}/>
                     </Switch>
                 </Container>
             </main>

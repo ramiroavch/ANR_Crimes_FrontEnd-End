@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Card, CardContent, CardHeader, useTheme} from "@material-ui/core";
-import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
 import { Bar } from 'react-chartjs-2';
+import axios from "../axios";
+import CustomModal from "../components/modal/CustomModal";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -20,37 +21,68 @@ const useStyles = makeStyles((theme) => ({
     fixedHeight: {
         height: 240,
     },
+    bodyModal: {
+        margin: 0,
+        paddingTop: theme.spacing(2)
+    }
 }));
 
 export default function Dashboard(props) {
     const classes = useStyles();
+    const [modal,setModal] = useState (false);
+    const [districts, setDistricts] = useState([]);
+    const [crimeTypes,setCrimeTypes]= useState([]);
+    const [crimesPerType,setCrimesPerType] = useState([]);
+    const [crimesPerDistricts,setCrimesPerDistricts] = useState([]);
+    const [crimesPerMonth,setCrimesPerMonth] = useState([]);
+    const [months,setMonths] = useState([]);
+    const handleModal = ()=>{
+        setModal(!modal);
+    }
+    const [modalBody,setModalBody] = useState({});
+    useEffect(() => {
+        axios.get('/api/crimes/stats',{}
+        ).then(({data})=>{
+            if(data.success===1) {
+                let qPerDistrict = data.data.quantity_per_district.sort((a,b)=> parseInt(a.District) - parseInt(b.District));
+                setDistricts(qPerDistrict.map(({District})=>District));
+                setCrimesPerDistricts(qPerDistrict.map(({quantity})=>quantity));
+                let qPerType = data.data.quantity_per_type;
+                setCrimesPerType(qPerType.map(({quantity})=>quantity))
+                setCrimeTypes(qPerType.map((a)=>a["Primary Type"]))
+                let qPerMonth = data.data.quantity_per_month.sort((a,b)=> parseInt(a.month) - parseInt(b.month))
+                setMonths(qPerMonth.map(({month})=>month));
+                setCrimesPerMonth(qPerMonth.map(({quantity})=>quantity))
 
+            } else {
+                setModalBody({title:"Unexpected error making the prediction",message:data.error ?? 'Unexpected error on server'})
+                setModal(true);
+            }
+        }).catch((error)=>{
+            setModalBody({title:"Unexpected error making the prediction",message:error.message?? 'Unexpected error on server'})
+            setModal(true);
+        })
+    }, []);
     const theme = useTheme();
 
-    const data = {
-        datasets: [
-            {
-                backgroundColor: '#3F51B5',
-                barPercentage: 0.5,
-                barThickness: 12,
-                borderRadius: 4,
-                categoryPercentage: 0.5,
-                data: [18, 5, 19, 27, 29, 19, 20],
-                label: 'This year',
-                maxBarThickness: 10
-            },
-            {
-                backgroundColor: '#EEEEEE',
-                barPercentage: 0.5,
-                barThickness: 12,
-                borderRadius: 4,
-                categoryPercentage: 0.5,
-                data: [11, 20, 12, 29, 30, 25, 13],
-                label: 'Last year',
-                maxBarThickness: 10
-            }
-        ],
-        labels: ['1 Aug', '2 Aug', '3 Aug', '4 Aug', '5 Aug', '6 Aug', '7 aug']
+    const data = (data,labels )=> {
+        return(
+        {
+            datasets: [
+                {
+                    backgroundColor: '#3F51B5',
+                    barPercentage: 0.5,
+                    barThickness: 12,
+                    borderRadius: 4,
+                    categoryPercentage: 0.5,
+                    data: data,
+                    label: 'Quantity of crimes',
+                    maxBarThickness: 10
+                }
+            ],
+            labels: labels
+        }
+        );
     };
 
     const options = {
@@ -77,15 +109,6 @@ export default function Dashboard(props) {
                     fontColor: theme.palette.text.secondary,
                     beginAtZero: true,
                     min: 0
-                },
-                gridLines: {
-                    borderDash: [2],
-                    borderDashOffset: [2],
-                    color: theme.palette.divider,
-                    drawBorder: false,
-                    zeroLineBorderDash: [2],
-                    zeroLineBorderDashOffset: [2],
-                    zeroLineColor: theme.palette.divider
                 }
             }
         ],
@@ -102,33 +125,106 @@ export default function Dashboard(props) {
         }
     };
     return (
-        <Card {...props}>
-            <CardHeader
-                title="Latest Sales"
-            />
-            <Divider />
-            <CardContent>
-                <Box
-                    sx={{
-                        height: 400,
-                        position: 'relative'
-                    }}
-                >
-                    <Bar
-                        data={data}
-                        options={options}
+        <div>
+            <div>
+                <Card {...props}>
+                    <CardHeader
+                        title="Crimes Per District"
                     />
-                </Box>
-            </CardContent>
-            <Divider />
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    p: 2
-                }}
-            >
-            </Box>
-        </Card>
+                    <Divider />
+                    <CardContent>
+                        <Box
+                            sx={{
+                                height: 400,
+                                position: 'relative'
+                            }}
+                        >
+                            <Bar
+                                data={data(crimesPerDistricts,districts)}
+                                options={options}
+                            />
+                        </Box>
+                    </CardContent>
+                    <Divider />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            p: 2
+                        }}
+                    >
+                    </Box>
+                </Card>
+            </div>
+            <div>
+                <Card {...props}>
+                    <CardHeader
+                        title="Crimes Per Crime Type"
+                    />
+                    <Divider />
+                    <CardContent>
+                        <Box
+                            sx={{
+                                height: 400,
+                                position: 'relative'
+                            }}
+                        >
+                            <Bar
+                                data={data(crimesPerType,crimeTypes)}
+                                options={options}
+                            />
+                        </Box>
+                    </CardContent>
+                    <Divider />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            p: 2
+                        }}
+                    >
+                    </Box>
+                </Card>
+            </div>
+            <div>
+                <Card {...props}>
+                    <CardHeader
+                        title="Crimes Per Month"
+                    />
+                    <Divider />
+                    <CardContent>
+                        <Box
+                            sx={{
+                                height: 400,
+                                position: 'relative'
+                            }}
+                        >
+                            <Bar
+                                data={data(crimesPerMonth,months)}
+                                options={options}
+                            />
+                        </Box>
+                    </CardContent>
+                    <Divider />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            p: 2
+                        }}
+                    >
+                    </Box>
+                </Card>
+            </div>
+            <div>
+                <CustomModal
+                    open={modal}
+                    handleClose={handleModal}
+                    title={modalBody.title}
+                >
+                    <p className={classes.bodyModal}>{modalBody.message}</p>
+                </CustomModal>
+            </div>
+        </div>
     );
 }

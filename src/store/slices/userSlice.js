@@ -108,7 +108,7 @@ export const refreshSession = () => (dispatch, getState) => {
         })
         .catch(() => {
             dispatch(clearSession());
-            browserHistory.push('/login');
+            browserHistory.push('/public/login');
         })
 }
 
