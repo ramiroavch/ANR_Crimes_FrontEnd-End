@@ -69,7 +69,7 @@ export default function Retrain() {
     const [pageLimit, setPageLimit] = React.useState(1);
     const [modalBody, setModalBody] = useState({});
     const [modal, setModal] = useState(false);
-    const [page, setPage] = React.useState(1);
+    const [page, setPage] = React.useState(0);
     const [gridLoading, setGridLoading] = React.useState(false);
     const [columnsCsv, setColumns] = useState([]);
     const [data, setData] = useState([]);
@@ -160,7 +160,8 @@ export default function Retrain() {
     ];
     useEffect(() => {
         setGridLoading(true);
-        axios.get('/api/crimes/get?per_page=' + 20 + '&page_number=' + page, {}
+        const newPage= page+1;
+        axios.get('/api/crimes/get?per_page=' + 20 + '&page_number=' + newPage, {}
         ).then(({data}) => {
             if (data.success === 1) {
                 setPageLimit(data.data.pages);
@@ -341,12 +342,12 @@ export default function Retrain() {
                     pageSize={20}
                     rowCount={pageLimit}
                     rowsPerPageOptions={[20]}
-                    checkboxSelection
                     disableSelectionOnClick
                     paginationMode="server"
                     onPageChange={(newPage) => setPage(newPage)}
                     getRowId={row => row.case_number}
                     loading={gridLoading}
+                    disableColumnMenu={true}
                 />
                 <div className={classes.dialog}>
                     <Dialog open={openDialog} onClose={handleCloseCreateDialog} aria-labelledby="form-dialog-title">

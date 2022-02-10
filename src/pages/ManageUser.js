@@ -39,7 +39,8 @@ export default function ManageUser(){
                          username: value.username,
                          email: value.email,
                          firstName: value.first_name,
-                         lastName: value.last_name
+                         lastName: value.last_name,
+                         status:value.is_active?'active':'inactive',
                      }
                  });
                 setRows(dataUsers);
@@ -56,17 +57,18 @@ export default function ManageUser(){
         })
     }, [loadGrid]);
     const handleClick = (event, values) => {
-        axios.put('/api/user/'+values.id+'/deactivate/',{}
+        axios.put('/api/user/'+values.id+'/activate/',{}
         ).then(({data}) =>{
             if(data.success===1) {
                 setLoadGrid(true);
+                setLoadGrid(false);
             } else {
-                setModalBody({title:"Unexpected error deleting the user",message:data.error ?? 'Unexpected error on server'})
+                setModalBody({title:"Unexpected error modifying the user",message:data.error ?? 'Unexpected error on server'})
                 setModal(true);
             }
         }
         ).catch(({data})=>{
-            setModalBody({title:"Unexpected error deleting the user",message:data.data.detail?? 'Unexpected error on server'})
+            setModalBody({title:"Unexpected error modifying the user",message:data.data.detail?? 'Unexpected error on server'})
             setModal(true);
         });
     };
@@ -76,25 +78,31 @@ export default function ManageUser(){
             field: 'username',
             headerName: 'Username',
             width: 150,
-            editable: true,
+            editable: false,
         },
         {
             field: 'email',
             headerName: 'Email',
             width: 150,
-            editable: true,
+            editable: false,
         },
         {
             field: 'firstName',
             headerName: 'First name',
             width: 150,
-            editable: true,
+            editable: false,
         },
         {
             field: 'lastName',
             headerName: 'Last name',
             width: 150,
-            editable: true,
+            editable: false,
+        },
+        {
+            field: 'status',
+            headerName:'Status',
+            width: 150,
+            editable:false
         },
         {
             field:'actions',
@@ -102,7 +110,9 @@ export default function ManageUser(){
             width: 150,
             disableColumnMenu:true,
             sortable:false,
+            editable:false,
             renderCell: (cellValues)=>{
+                console.log(cellValues);
                 return(
                     <Button
                         variant="contained"
@@ -111,7 +121,7 @@ export default function ManageUser(){
                             handleClick(event,cellValues)
                         }}
                     >
-                        Eliminar
+                        {cellValues.row.status==='active'?"Inactivate":"Activate"}
                     </Button>
                 )
             }
