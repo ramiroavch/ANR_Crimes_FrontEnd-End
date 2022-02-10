@@ -91,7 +91,7 @@ export default function Admin() {
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         Big Brother IA
                     </Typography>
-                    { user.username === "su" ?
+                    { user.isAdmin?
                         <Button onClick={handleRegister} variant="contained" disableElevation>
                             <PersonAddIcon/>
                             Sign Up

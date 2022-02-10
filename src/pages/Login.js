@@ -91,11 +91,12 @@ const Login = () => {
         })
         dispatch(login(myForm.data.username.value, myForm.data.password.value))
             .then(() => history.push("/admin/dashboard"))
-            .catch(({response}) => {
+            .catch((reason) => {
+                const {data} = reason.response;
                 actualizarEstado({
                     modal: {
                         title: 'Login error',
-                        message: response.data.detail ?? '',
+                        message: data?.detail ?? 'Unexpected error',
                     }
                 })
                 setModal(true);

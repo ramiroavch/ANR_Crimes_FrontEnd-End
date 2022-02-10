@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import {ValidateValue} from "../commons/Utils";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from '../axios.js';
 import CustomModal from '../components/modal/CustomModal';
@@ -31,125 +31,146 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
-    bodyModal:{
-        margin:0,
-        paddingTop:theme.spacing(2)
+    bodyModal: {
+        margin: 0,
+        paddingTop: theme.spacing(2)
     }
 }));
 
-const Register= ()=> {
+const Register = () => {
     const history = useHistory();
-    const [modal,setModal] = useState (false);
-    const handleModal = ()=>{
+    const [modal, setModal] = useState(false);
+    const handleModal = () => {
         setModal(!modal);
     }
-    const [myForm,updateForm]= useState({
-        data:{
-            first_name:{
-                value:'',
-                clicked:false,
-                error:true
-            },
-            last_name:{
-                value:'',
-                clicked:false,
-                error:true
-            },
-            email:{
-                value:'',
-                clicked:false,
-                error:true
-            },
-            username:{
+    const [myForm, updateForm] = useState({
+        data: {
+            first_name: {
                 value: '',
-                clicked:false,
-                error:true
+                clicked: false,
+                error: true
             },
-            password:{
-                value:'',
-                clicked:false,
-                error:true
+            last_name: {
+                value: '',
+                clicked: false,
+                error: true
             },
-            confirm_password:{
-                value:'',
-                clicked:false,
-                error:true
+            email: {
+                value: '',
+                clicked: false,
+                error: true
+            },
+            username: {
+                value: '',
+                clicked: false,
+                error: true
+            },
+            password: {
+                value: '',
+                clicked: false,
+                error: true
+            },
+            confirm_password: {
+                value: '',
+                clicked: false,
+                error: true
             }
         },
-        modal:{
-            title:'',
-            message:'',
-            buttonMessage:''
+        modal: {
+            title: '',
+            message: '',
+            buttonMessage: ''
         },
-        error:false,
-        ok:false,
-        loading:false,
-        redirect:false,
+        error: false,
+        ok: false,
+        loading: false,
+        redirect: false,
     });
     let actualizarEstado = (data) => {
         updateForm(Object.assign({}, myForm, data));
     };
-    const updateValue= (event,identifier,type)=>{
+    const updateValue = (event, identifier, type) => {
         event.preventDefault();
         const parent = {...myForm};
-        const origin= {...parent['data']};
+        const origin = {...parent['data']};
         const element = {...origin[identifier]}
         element.value = event.target.value;
-        element.error = ValidateValue(event.target.value,type);
+        element.error = ValidateValue(event.target.value, type);
         element.clicked = true;
-        origin[identifier]= element;
-        parent['data']=origin;
-        parent.error=activateButton(origin);
-        updateForm (parent);
+        origin[identifier] = element;
+        parent['data'] = origin;
+        parent.error = activateButton(origin);
+        updateForm(parent);
     };
 
-    const handleSubmit = async (event)=>{
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            actualizarEstado({
-                loading: true
-            })
-            await axios.post('/api/user/add/',
-                {
-                    "first_name": myForm.data.first_name.value,
-                    "last_name": myForm.data.last_name.value,
-                    "email": myForm.data.email.value,
-                    "username": myForm.data.username.value,
-                    "password": myForm.data.password.value,
-                    "confirm_password": myForm.data.confirm_password.value
-                }
-            ).then((response)=>{
-                myForm.redirect = true;
-                history.push("/admin/dashboard");
-            }).catch(({response})=>{
+            if (!validateEmail(myForm.data.email.value)) {
                 actualizarEstado({
-                    modal:{
-                        title:'Error create new user',
-                        message:response.data.error??'',
+                    modal: {
+                        title: 'Error create new user',
+                        message: 'Invalid email',
                     }
                 })
                 setModal(true);
-            });
+            } else if (myForm.data.password.value !== myForm.data.confirm_password.value) {
+                actualizarEstado({
+                    modal: {
+                        title: 'Error create new user',
+                        message: 'Passwords are different',
+                    }
+                })
+                setModal(true);
+            } else {
+                actualizarEstado({
+                    loading: true
+                })
+                await axios.post('/api/user/add/',
+                    {
+                        "first_name": myForm.data.first_name.value,
+                        "last_name": myForm.data.last_name.value,
+                        "email": myForm.data.email.value,
+                        "username": myForm.data.username.value,
+                        "password": myForm.data.password.value,
+                        "confirm_password": myForm.data.confirm_password.value
+                    }
+                ).then((response) => {
+                    myForm.redirect = true;
+                    history.push("/admin/dashboard");
+                }).catch(({response}) => {
+                    actualizarEstado({
+                        modal: {
+                            title: 'Error create new user',
+                            message: response.data.error ?? '',
+                        }
+                    })
+                    setModal(true);
+                });
+            }
 
-        } catch (err){
+        } catch (err) {
             actualizarEstado({
-                loading:false
+                loading: false
             });
         }
     }
 
-    const getError = (identifier)=>{
-        const origin= {...myForm.data};
-        const element = {...origin[identifier]};
-        return element.error && element.clicked;
-    };
 
-    const activateButton=(data)=>{
-        const origin= data;
+    const activateButton = (data) => {
+        const origin = data;
         let error = true;
-        for (let element in origin){
-            if (origin[element].error===true){
-                error =false;
+        for (let element in origin) {
+            if (origin[element].error === true) {
+                error = false;
             }
 
         }
@@ -160,10 +181,10 @@ const Register= ()=> {
     return (
         <div>
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
+                <CssBaseline/>
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
+                        <LockOutlinedIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Sign Up
@@ -180,7 +201,7 @@ const Register= ()=> {
                                     label="First Name"
                                     name="first_name"
                                     autoFocus
-                                    onChange={(event)=>updateValue(event,'first_name','number')}
+                                    onChange={(event) => updateValue(event, 'first_name', 'number')}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -193,7 +214,7 @@ const Register= ()=> {
                                     label="Last Name"
                                     name="last_name"
                                     autoFocus
-                                    onChange={(event)=>updateValue(event,'last_name','number')}
+                                    onChange={(event) => updateValue(event, 'last_name', 'number')}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -206,7 +227,7 @@ const Register= ()=> {
                                     label="Username"
                                     name="username"
                                     autoFocus
-                                    onChange={(event)=>updateValue(event,'username','number')}
+                                    onChange={(event) => updateValue(event, 'username', 'number')}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -220,7 +241,7 @@ const Register= ()=> {
                                     name="email"
                                     autoComplete="email"
                                     autoFocus
-                                    onChange={(event)=>updateValue(event,'email','number')}
+                                    onChange={(event) => updateValue(event, 'email', 'number')}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -234,7 +255,7 @@ const Register= ()=> {
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
-                                    onChange={(event)=>updateValue(event,'password','string')}
+                                    onChange={(event) => updateValue(event, 'password', 'string')}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -248,7 +269,7 @@ const Register= ()=> {
                                     type="password"
                                     id="confirm_password"
                                     autoComplete="current-password"
-                                    onChange={(event)=>updateValue(event,'confirm_password','string')}
+                                    onChange={(event) => updateValue(event, 'confirm_password', 'string')}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -267,9 +288,9 @@ const Register= ()=> {
                 </div>
             </Container>
             <CustomModal
-                open = {modal}
-                handleClose = {handleModal}
-                title = {myForm.modal.title}
+                open={modal}
+                handleClose={handleModal}
+                title={myForm.modal.title}
             >
                 <p className={classes.bodyModal}>{myForm.modal.message}</p>
             </CustomModal>

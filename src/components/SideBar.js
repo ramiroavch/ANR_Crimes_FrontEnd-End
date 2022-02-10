@@ -87,7 +87,7 @@ export default function SideBar({open}){
             </ListItem>
         </List>
         <Divider/>
-        {user.username === "su" ?
+        {user.isAdmin ?
             <List>
                 <ListSubheader inset>Admin Modules</ListSubheader>
                 <ListItem button component={Link} to={'/admin/retrain'}>

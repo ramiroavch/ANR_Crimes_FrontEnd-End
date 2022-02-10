@@ -22,11 +22,13 @@ export default function ManageUser(){
     const [modalBody,setModalBody] = useState({});
     const [modal, setModal] = useState(false);
     const [loadGrid,setLoadGrid] = useState(false);
+    const [gridLoading,setGridLoading] = React.useState(false);
     const handleModal = () => {
         setModal(!modal);
     }
     const [rows,setRows] = useState([]);
     useEffect(() => {
+        setGridLoading(true);
         axios.get('/api/user/get',{}
         ).then(({data})=>{
             if(data.success===1) {
@@ -46,9 +48,11 @@ export default function ManageUser(){
                 setModalBody({title:"Unexpected error making the prediction",message:data.error ?? 'Unexpected error on server'})
                 setModal(true);
             }
-        }).catch((error)=>{
-            setModalBody({title:"Unexpected error making the prediction",message:error.message?? 'Unexpected error on server'})
+        }).catch(({data})=>{
+            setModalBody({title:"Unexpected error making the prediction",message:data.data.detail?? 'Unexpected error on server'})
             setModal(true);
+        }).finally(()=>{
+            setGridLoading(false);
         })
     }, [loadGrid]);
     const handleClick = (event, values) => {
@@ -61,8 +65,8 @@ export default function ManageUser(){
                 setModal(true);
             }
         }
-        ).catch((error)=>{
-            setModalBody({title:"Unexpected error deleting the user",message:error.message?? 'Unexpected error on server'})
+        ).catch(({data})=>{
+            setModalBody({title:"Unexpected error deleting the user",message:data.data.detail?? 'Unexpected error on server'})
             setModal(true);
         });
     };
@@ -129,6 +133,7 @@ export default function ManageUser(){
                     pageSize={5}
                     rowsPerPageOptions={[5]}
                     disableColumnMenu={true}
+                    loading={gridLoading}
                 />
             </div>
             <CustomModal

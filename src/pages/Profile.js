@@ -36,8 +36,8 @@ export default function Profile(){
     const classes = useStyles();
     const {user} = useSelector((state) => state.user)
     const[username,setUsername]= React.useState(user.username);
-    const[firstName,setFirstName] = React.useState(user.first_name);
-    const[lastName,setLastName] = React.useState(user.last_name);
+    const[firstName,setFirstName] = React.useState(user.firstName);
+    const[lastName,setLastName] = React.useState(user.lastName);
     const [modalBody,setModalBody] = useState({});
     const [modal, setModal] = useState(false);
     const handleModal = () => {

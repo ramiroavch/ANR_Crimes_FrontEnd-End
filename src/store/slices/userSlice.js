@@ -26,8 +26,16 @@ export const userSlice = createSlice({
         startSession: (state, {payload}) => {
             state.accessToken = payload.accessToken
             state.refreshToken = payload.refreshToken
-            if(payload.user) {
-                state.user = payload.user
+            if (payload.user) {
+                const user = {
+                    id: payload.user.id,
+                    username: payload.user.username,
+                    email: payload.user.email,
+                    firstName: payload.user.first_name,
+                    lastName: payload.user.last_name,
+                    isAdmin: payload.user.is_superuser
+                }
+                state.user = user
             }
             addToken(payload.accessToken)
         },
@@ -60,23 +68,19 @@ export const login = (username, password) => async (dispatch) => {
             "password": password
         }
     )
-    localStorage.setItem('refresh', data.refresh);
     const decoded = (jwtDecode(data.access));
-    let response = await axios.get('/api/user/'+decoded.user_id+'/find/',
+    let response = await axios.get('/api/user/' + decoded.user_id + '/find/',
         {
-            headers: { Authorization: `Bearer ${data.access}` }
+            headers: {Authorization: `Bearer ${data.access}`}
         }
     )
     const userData = response.data.data;
-    localStorage.setItem('userData',JSON.stringify(userData));
-    const user = {
-        id:userData.id,
-        username:userData.username,
-        email:userData.email,
-        firstName : userData.first_name,
-        lastName: userData.last_name
+    if (!userData.is_active) {
+        return Promise.reject({response: {data: {detail: "This user is inactive"}}})
     }
-    dispatch(startSession({user:user, accessToken: data.access, refreshToken: data.refresh}))
+    localStorage.setItem('userData', JSON.stringify(userData));
+    localStorage.setItem('refresh', data.refresh);
+    dispatch(startSession({user: userData, accessToken: data.access, refreshToken: data.refresh}))
     dispatch(startRefreshSession())
 }
 
@@ -91,7 +95,7 @@ export const checkSession = () => async (dispatch) => {
         {
             "refresh": refreshToken
         })
-    dispatch(startSession({user:JSON.parse(userData),accessToken: data.access, refreshToken}))
+    dispatch(startSession({user: JSON.parse(userData), accessToken: data.access, refreshToken}))
     dispatch(startRefreshSession())
 }
 
@@ -112,7 +116,7 @@ export const refreshSession = () => (dispatch, getState) => {
         })
 }
 
-export const logout = () => async(dispatch) => {
+export const logout = () => async (dispatch) => {
     //  Call logout endpoint
     // axios.post('/api/token/refresh')
     //     .then(({data}) => {
