@@ -83,21 +83,21 @@ export default function PredictionHeatMap(){
                     options: options
                 });
             } else {
-                setModalBody({title:"Unexpected error making the prediction",message:data.error ?? 'Unexpected error on server'})
+                setModalBody({title:"Error inesperado al consultar los registros",message:data.error ?? 'Error inesperado en el servidor'})
                 setModal(true);
             }
         }).catch((error)=>{
-            setModalBody({title:"Unexpected error making the prediction",message:error.message?? 'Unexpected error on server'})
+            setModalBody({title:"Error inesperado al consultar los registros",message:error.message?? 'Error inesperado en el servidor'})
             setModal(true);
         })
     }, []);
     return(
         <div>
             <Typography variant="h4">
-                Heat Map
+                Mapa de calor
             </Typography>
             <Typography variant="subtitle2" className={classes.paragraph} paragraph={true}>
-                In this section you can see a report with a heat map with all the predictions made it by the system
+                En esta sección podrá consultar un reporte en formato de mapa de calor, en el cual se mostrarán todos los crímenes predichos con sus coordenadas
             </Typography>
             <div>
                 <div className={classes.mapContainer}>

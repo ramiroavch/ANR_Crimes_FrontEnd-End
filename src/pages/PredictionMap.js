@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 120,
+        minWidth: 140,
     },
 }))
 
@@ -121,15 +121,15 @@ export default function PredictionMap() {
                     setOpenMap(true);
                 } else {
                     setModalBody({
-                        title: "Unexpected error making the prediction",
-                        message: data.error ?? 'Unexpected error on server'
+                        title: "Error inesperado al realizar la predicción",
+                        message: data.error ?? 'Error inesperado en el servidor'
                     })
                     setModal(true);
                 }
             }).catch((error) => {
                 setModalBody({
-                    title: "Unexpected error making the prediction",
-                    message: error.message ?? 'Unexpected error on server'
+                    title: "Error inesperado realizando la predicción",
+                    message: error.message ?? 'Error inesperado en el servidor'
                 })
                 setModal(true);
             })
@@ -138,57 +138,54 @@ export default function PredictionMap() {
     return (
         <div>
             <Typography variant="h4">
-                Predict On Map
+                Realizar Predicción
             </Typography>
             <Typography variant="subtitle2" className={classes.paragraph} paragraph={true}>
-                In this section you can make and find a prediction in the state of Chicago with his corresponding
-                coordinates.
+                En este módulo podrás realizar una predicción y poder visualizar las coordenadas resultantes del crimen
             </Typography>
             <Typography variant="subtitle2" className={classes.paragraph} paragraph={true}>
-                Specify the type of crime you want to predict:
+                Selecciona el tipo de crimen a predecir:
             </Typography>
             <FormControl className={classes.formControl}>
-                <InputLabel id="demo-simple-select-outlined-label">Crime Type</InputLabel>
+                <InputLabel id="demo-simple-select-outlined-label">Tipo de crimen</InputLabel>
                 <Select
                     labelId="crimeTypeSelect"
                     id="crimeTypeSelect"
                     value={crimeType}
                     onChange={handleChangeSelect}
-                    label="CrimeType"
+                    label="Tipo de crimen"
                 >
-                    <MenuItem value={"primary_type_ARSON"}>Arson</MenuItem>
-                    <MenuItem value={"primary_type_ASSAULT"}>Assault</MenuItem>
-                    <MenuItem value={"primary_type_BATTERY"}>Battery</MenuItem>
-                    <MenuItem value={"primary_type_BURGLARY"}>Burglary</MenuItem>
-                    <MenuItem value={"primary_type_CONCEALED CARRY LICENSE VIOLATION"}>Concealed Carry Permit
-                        Violations</MenuItem>
-                    <MenuItem value={"primary_type_CRIM SEXUAL ASSAULT"}>Criminal Sexual Assault</MenuItem>
-                    <MenuItem value={"primary_type_CRIMINAL DAMAGE"}>Criminal Damage</MenuItem>
-                    <MenuItem value={"primary_type_CRIMINAL TRESPASS"}>Criminal Trespass</MenuItem>
-                    <MenuItem value={"primary_type_DECEPTIVE PRACTICE"}>Deceptive Practice</MenuItem>
-                    <MenuItem value={"primary_type_GAMBLING"}>Gambling</MenuItem>
-                    <MenuItem value={"primary_type_HOMICIDE"}>Homicide</MenuItem>
-                    <MenuItem value={"primary_type_HUMAN TRAFFICKING"}>Human Trafficking</MenuItem>
-                    <MenuItem value={"primary_type_INTERFERENCE WITH PUBLIC OFFICER"}>Interference With Public
-                        Officer</MenuItem>
-                    <MenuItem value={"primary_type_INTIMIDATION"}>Intimidation</MenuItem>
-                    <MenuItem value={"primary_type_KIDNAPPING"}>Kidnapping</MenuItem>
-                    <MenuItem value={"primary_type_LIQUOR LAW VIOLATION"}>Liquor Law Violation</MenuItem>
-                    <MenuItem value={"primary_type_MOTOR VEHICLE THEFT"}>Motor Vehicle Theft</MenuItem>
-                    <MenuItem value={"primary_type_NARCOTICS"}>Narcotics</MenuItem>
-                    <MenuItem value={"primary_type_NON-CRIMINAL"}>Non Criminal</MenuItem>
-                    <MenuItem value={"primary_type_OBSCENITY"}>Obscenity</MenuItem>
-                    <MenuItem value={"primary_type_OFFENSE INVOLVING CHILDREN"}>Offense Involving Children</MenuItem>
-                    <MenuItem value={"primary_type_OTHER NARCOTIC VIOLATION"}>Other Narcotic Violation</MenuItem>
-                    <MenuItem value={"primary_type_OTHER OFFENSE"}>Other Offense</MenuItem>
-                    <MenuItem value={"primary_type_PROSTITUTION"}>Prostitution</MenuItem>
-                    <MenuItem value={"primary_type_PUBLIC INDECENCY"}>Public Indecency</MenuItem>
-                    <MenuItem value={"primary_type_PUBLIC PEACE VIOLATION"}>Public Peace Violation</MenuItem>
-                    <MenuItem value={"primary_type_ROBBERY"}>Robbery</MenuItem>
-                    <MenuItem value={"primary_type_SEX OFFENSE"}>Sex Offense</MenuItem>
-                    <MenuItem value={"primary_type_STALKING"}>Stalking</MenuItem>
-                    <MenuItem value={"primary_type_THEFT"}>Theft</MenuItem>
-                    <MenuItem value={"primary_type_WEAPONS VIOLATION"}>Weapons Violation</MenuItem>
+                    <MenuItem value={"primary_type_ARSON"}>Incendio provocado</MenuItem>
+                    <MenuItem value={"primary_type_ASSAULT"}>Asalto</MenuItem>
+                    <MenuItem value={"primary_type_BATTERY"}>Agresión</MenuItem>
+                    <MenuItem value={"primary_type_BURGLARY"}>Allanamiento de morada</MenuItem>
+                    <MenuItem value={"primary_type_CONCEALED CARRY LICENSE VIOLATION"}>Infracción de permiso de porte</MenuItem>
+                    <MenuItem value={"primary_type_CRIM SEXUAL ASSAULT"}>Asalto sexual</MenuItem>
+                    <MenuItem value={"primary_type_CRIMINAL DAMAGE"}>Daño a la propiedad</MenuItem>
+                    <MenuItem value={"primary_type_CRIMINAL TRESPASS"}>Invasión a propiedad privada</MenuItem>
+                    <MenuItem value={"primary_type_DECEPTIVE PRACTICE"}>Práctica engañosa</MenuItem>
+                    <MenuItem value={"primary_type_GAMBLING"}>Apuestas ilegales</MenuItem>
+                    <MenuItem value={"primary_type_HOMICIDE"}>Homicidio</MenuItem>
+                    <MenuItem value={"primary_type_HUMAN TRAFFICKING"}>Trata de personas</MenuItem>
+                    <MenuItem value={"primary_type_INTERFERENCE WITH PUBLIC OFFICER"}>Interferencia hacia un oficial</MenuItem>
+                    <MenuItem value={"primary_type_INTIMIDATION"}>Acoso</MenuItem>
+                    <MenuItem value={"primary_type_KIDNAPPING"}>Secuestro</MenuItem>
+                    <MenuItem value={"primary_type_LIQUOR LAW VIOLATION"}>Violación de la ley de licores</MenuItem>
+                    <MenuItem value={"primary_type_MOTOR VEHICLE THEFT"}>Robo Automóvil</MenuItem>
+                    <MenuItem value={"primary_type_NARCOTICS"}>Narcóticos</MenuItem>
+                    <MenuItem value={"primary_type_NON-CRIMINAL"}>No Criminal</MenuItem>
+                    <MenuItem value={"primary_type_OBSCENITY"}>Conducta obscena</MenuItem>
+                    <MenuItem value={"primary_type_OFFENSE INVOLVING CHILDREN"}>Ofensa a menores</MenuItem>
+                    <MenuItem value={"primary_type_OTHER NARCOTIC VIOLATION"}>Otras violaciones de narcóticos</MenuItem>
+                    <MenuItem value={"primary_type_OTHER OFFENSE"}>Otros delitos</MenuItem>
+                    <MenuItem value={"primary_type_PROSTITUTION"}>Prostitución</MenuItem>
+                    <MenuItem value={"primary_type_PUBLIC INDECENCY"}>Idencencia pública</MenuItem>
+                    <MenuItem value={"primary_type_PUBLIC PEACE VIOLATION"}>Alteración de la paz pública</MenuItem>
+                    <MenuItem value={"primary_type_ROBBERY"}>Hurto</MenuItem>
+                    <MenuItem value={"primary_type_SEX OFFENSE"}>Ofensa sexual</MenuItem>
+                    <MenuItem value={"primary_type_STALKING"}>Acoso</MenuItem>
+                    <MenuItem value={"primary_type_THEFT"}>Hurto</MenuItem>
+                    <MenuItem value={"primary_type_WEAPONS VIOLATION"}>Violación contra la ley de Armas</MenuItem>
                 </Select>
             </FormControl>
             {
@@ -197,7 +194,7 @@ export default function PredictionMap() {
                         <Box textAlign='center'>
                             <Button onClick={handlePrediction} color="primary" variant="contained">
                                 <ExploreIcon/>
-                                Make Another Prediction
+                                Hacer otra predicción
                             </Button>
                         </Box>
                         <div className={classes.mapContainer}>
@@ -222,7 +219,7 @@ export default function PredictionMap() {
                     <Box textAlign='center'>
                         <Button onClick={handlePrediction} color="primary" variant="contained">
                             <ExploreIcon/>
-                            Make Prediction
+                            Hacer Predicción
                         </Button>
                     </Box>
 

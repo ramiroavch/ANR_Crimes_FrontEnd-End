@@ -46,11 +46,11 @@ export default function ManageUser(){
                 setRows(dataUsers);
                 setLoadGrid(false);
             } else {
-                setModalBody({title:"Unexpected error making the prediction",message:data.error ?? 'Unexpected error on server'})
+                setModalBody({title:"Error inesperado al consultar los usuarios",message:data.error ?? 'Error inesperado en el servidor'})
                 setModal(true);
             }
         }).catch(({data})=>{
-            setModalBody({title:"Unexpected error making the prediction",message:data.data.detail?? 'Unexpected error on server'})
+            setModalBody({title:"Error inesperado al consultar los usuarios",message:data.data.detail?? 'Error inesperado en el servidor'})
             setModal(true);
         }).finally(()=>{
             setGridLoading(false);
@@ -63,12 +63,12 @@ export default function ManageUser(){
                 setLoadGrid(true);
                 setLoadGrid(false);
             } else {
-                setModalBody({title:"Unexpected error modifying the user",message:data.error ?? 'Unexpected error on server'})
+                setModalBody({title:"Error inesperado la modificar el usuario",message:data.error ?? 'Error inesperado en el servidor'})
                 setModal(true);
             }
         }
         ).catch(({data})=>{
-            setModalBody({title:"Unexpected error modifying the user",message:data.data.detail?? 'Unexpected error on server'})
+            setModalBody({title:"Error inesperado la modificar el usuario",message:data.data.detail?? 'Error inesperado en el servidor'})
             setModal(true);
         });
     };
@@ -76,37 +76,37 @@ export default function ManageUser(){
         { field: 'id', headerName: 'ID', width: 120 },
         {
             field: 'username',
-            headerName: 'Username',
-            width: 150,
+            headerName: 'Nombre de usuario',
+            width: 200,
             editable: false,
         },
         {
             field: 'email',
-            headerName: 'Email',
-            width: 150,
+            headerName: 'Correo',
+            width: 250,
             editable: false,
         },
         {
             field: 'firstName',
-            headerName: 'First name',
+            headerName: 'Nombre',
             width: 150,
             editable: false,
         },
         {
             field: 'lastName',
-            headerName: 'Last name',
+            headerName: 'Apellido',
             width: 150,
             editable: false,
         },
         {
             field: 'status',
-            headerName:'Status',
+            headerName:'Estatus',
             width: 150,
             editable:false
         },
         {
             field:'actions',
-            headerName: 'Actions',
+            headerName: 'Acciones',
             width: 150,
             disableColumnMenu:true,
             sortable:false,
@@ -121,7 +121,7 @@ export default function ManageUser(){
                             handleClick(event,cellValues)
                         }}
                     >
-                        {cellValues.row.status==='active'?"Inactivate":"Activate"}
+                        {cellValues.row.status==='active'?"Desactivar":"Activar"}
                     </Button>
                 )
             }
@@ -131,10 +131,10 @@ export default function ManageUser(){
     return (
         <div>
             <Typography variant="h4">
-                Users
+                Usuarios
             </Typography>
             <Typography variant="subtitle2" className={classes.paragraph} paragraph={true}>
-                Users Registered:
+                Usuarios registrados:
             </Typography>
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid

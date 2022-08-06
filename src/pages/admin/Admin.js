@@ -94,12 +94,12 @@ export default function Admin() {
                     { user.isAdmin?
                         <Button onClick={handleRegister} variant="contained" disableElevation>
                             <PersonAddIcon/>
-                            Sign Up
+                            Registrar
                         </Button>:null
                     }
                     <Button onClick={handleLogout} variant="contained" color="secondary" disableElevation className={classes.logoutButton}>
                         <ExitToAppIcon/>
-                        Logout
+                        Cerrar Sesión
                     </Button>
                 </Toolbar>
             </AppBar>

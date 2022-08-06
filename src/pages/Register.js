@@ -117,16 +117,16 @@ const Register = () => {
             if (!validateEmail(myForm.data.email.value)) {
                 actualizarEstado({
                     modal: {
-                        title: 'Error create new user',
-                        message: 'Invalid email',
+                        title: 'Error creando el usuario',
+                        message: 'Correo inválido',
                     }
                 })
                 setModal(true);
             } else if (myForm.data.password.value !== myForm.data.confirm_password.value) {
                 actualizarEstado({
                     modal: {
-                        title: 'Error create new user',
-                        message: 'Passwords are different',
+                        title: 'Error creando el usuario',
+                        message: 'Las contraseñas no coinciden',
                     }
                 })
                 setModal(true);
@@ -149,8 +149,8 @@ const Register = () => {
                 }).catch(({response}) => {
                     actualizarEstado({
                         modal: {
-                            title: 'Error create new user',
-                            message: response.data.error ?? '',
+                            title: 'Error creando el usuario',
+                            message: response.data.error ?? 'Error inesperado',
                         }
                     })
                     setModal(true);
@@ -187,7 +187,7 @@ const Register = () => {
                         <LockOutlinedIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign Up
+                        Registro
                     </Typography>
                     <form className={classes.form} noValidate onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
@@ -198,7 +198,7 @@ const Register = () => {
                                     required
                                     fullWidth
                                     id="first_name"
-                                    label="First Name"
+                                    label="Nombre"
                                     name="first_name"
                                     autoFocus
                                     onChange={(event) => updateValue(event, 'first_name', 'number')}
@@ -211,7 +211,7 @@ const Register = () => {
                                     required
                                     fullWidth
                                     id="last_name"
-                                    label="Last Name"
+                                    label="Apellido"
                                     name="last_name"
                                     autoFocus
                                     onChange={(event) => updateValue(event, 'last_name', 'number')}
@@ -224,7 +224,7 @@ const Register = () => {
                                     required
                                     fullWidth
                                     id="username"
-                                    label="Username"
+                                    label="Nombre de usuario"
                                     name="username"
                                     autoFocus
                                     onChange={(event) => updateValue(event, 'username', 'number')}
@@ -237,7 +237,7 @@ const Register = () => {
                                     required
                                     fullWidth
                                     id="email"
-                                    label="Email Address"
+                                    label="Correo"
                                     name="email"
                                     autoComplete="email"
                                     autoFocus
@@ -251,7 +251,7 @@ const Register = () => {
                                     required
                                     fullWidth
                                     name="password"
-                                    label="Password"
+                                    label="Contraseña"
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
@@ -265,7 +265,7 @@ const Register = () => {
                                     required
                                     fullWidth
                                     name="confirm_password"
-                                    label="Confirm Password"
+                                    label="Confirmar contraseña"
                                     type="password"
                                     id="confirm_password"
                                     autoComplete="current-password"
@@ -280,7 +280,7 @@ const Register = () => {
                                     color="primary"
                                     className={classes.submit}
                                 >
-                                    Register
+                                    Registrar
                                 </Button>
                             </Grid>
                         </Grid>

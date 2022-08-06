@@ -71,36 +71,36 @@ export default function SideBar({open}){
                 <ListItemIcon>
                     <MapIcon />
                 </ListItemIcon>
-                <ListItemText primary="Predict On Map" />
+                <ListItemText primary="Realizar Predicción" />
             </ListItem>
             <ListItem button component={Link} to={'/admin/heat-map'}>
                 <ListItemIcon>
                     <BarChartIcon />
                 </ListItemIcon>
-                <ListItemText primary="Heat Map"/>
+                <ListItemText primary="Mapa de Calor"/>
             </ListItem>
             <ListItem button component={Link} to={'/admin/profile'}>
                 <ListItemIcon>
                     <AccountBoxIcon />
                 </ListItemIcon>
-                <ListItemText primary="Profile"/>
+                <ListItemText primary="Perfil"/>
             </ListItem>
         </List>
         <Divider/>
         {user.isAdmin ?
             <List>
-                <ListSubheader inset>Admin Modules</ListSubheader>
+                <ListSubheader inset>Administración</ListSubheader>
                 <ListItem button component={Link} to={'/admin/retrain'}>
                     <ListItemIcon>
                         <DeveloperBoardIcon/>
                     </ListItemIcon>
-                    <ListItemText primary="Retrain IA"/>
+                    <ListItemText primary="Re-entrenar IA"/>
                 </ListItem>
                 <ListItem button component={Link} to={'/admin/users'}>
                     <ListItemIcon>
                         <AssignmentIcon/>
                     </ListItemIcon>
-                    <ListItemText primary="Manage Users"/>
+                    <ListItemText primary="Administrar Usuarios"/>
                 </ListItem>
             </List>:null
         }

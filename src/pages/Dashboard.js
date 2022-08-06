@@ -55,11 +55,11 @@ export default function Dashboard(props) {
                 setCrimesPerMonth(qPerMonth.map(({quantity})=>quantity))
 
             } else {
-                setModalBody({title:"Unexpected error making the prediction",message:data.error ?? 'Unexpected error on server'})
+                setModalBody({title:"Error inesperado al obtener las estadísticas",message:data.error ?? 'Error inesperado en el servidor'})
                 setModal(true);
             }
         }).catch((error)=>{
-            setModalBody({title:"Unexpected error making the prediction",message:error.message?? 'Unexpected error on server'})
+            setModalBody({title:"Error inesperado al obtener las estadísticas",message:error.message?? 'Error inesperado'})
             setModal(true);
         })
     }, []);
@@ -76,7 +76,7 @@ export default function Dashboard(props) {
                     borderRadius: 4,
                     categoryPercentage: 0.5,
                     data: data,
-                    label: 'Quantity of crimes',
+                    label: 'Cantidad de crimenes',
                     maxBarThickness: 10
                 }
             ],
@@ -129,7 +129,7 @@ export default function Dashboard(props) {
             <div>
                 <Card {...props}>
                     <CardHeader
-                        title="Crimes Per District"
+                        title="Crimenes por Distrito"
                     />
                     <Divider />
                     <CardContent>
@@ -159,7 +159,7 @@ export default function Dashboard(props) {
             <div>
                 <Card {...props}>
                     <CardHeader
-                        title="Crimes Per Crime Type"
+                        title="Crimenes por Tipo"
                     />
                     <Divider />
                     <CardContent>
@@ -189,7 +189,7 @@ export default function Dashboard(props) {
             <div>
                 <Card {...props}>
                     <CardHeader
-                        title="Crimes Per Month"
+                        title="Crimenes por Mes"
                     />
                     <Divider />
                     <CardContent>

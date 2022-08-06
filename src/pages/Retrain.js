@@ -132,27 +132,27 @@ export default function Retrain() {
     const columns = [
         {
             field: 'case_number',
-            headerName: 'Case Number',
+            headerName: 'Número del caso',
             width: 200,
             editable: true,
         },
         {
             field: 'x_coordinate',
-            headerName: 'X Coordinate',
+            headerName: 'Coordenada X',
             type: 'number',
             width: 200,
             editable: true,
         },
         {
             field: 'y_coordinate',
-            headerName: 'Y Coordinate',
+            headerName: 'Coordenada Y',
             type: 'number',
             width: 200,
             editable: true,
         },
         {
             field: 'date',
-            headerName: 'Date',
+            headerName: 'Fecha',
             type: 'string',
             width: 200,
             editable: true,
@@ -168,15 +168,15 @@ export default function Retrain() {
                 setRows(data.data.crimes);
             } else {
                 setModalBody({
-                    title: "Unexpected error on the consult",
-                    message: data.error ?? 'Unexpected error on server'
+                    title: "Error inesperado en la consulta",
+                    message: data.error ?? 'Error inesperado en el servidor'
                 })
                 setModal(true);
             }
         }).catch((error) => {
             setModalBody({
-                title: "Unexpected error on the consult",
-                message: error.message ?? 'Unexpected error on server'
+                title: "Error inesperado en la consulta",
+                message: error.message ?? 'Error inesperado en el servidor'
             })
             setModal(true);
         }).finally(() => {
@@ -246,7 +246,7 @@ export default function Retrain() {
             };
             reader.readAsBinaryString(file);
         } catch (err) {
-            setModalBody({title: "Unexpected error processing the file", message: 'Valid the file format'})
+            setModalBody({title: "Error inesperado al procesar el archivo", message: 'Debe validar el formato del archivo'})
             setModal(true);
         }
     }
@@ -281,15 +281,15 @@ export default function Retrain() {
         });
         setLoading(false);
         setModal(true);
-        setModalBody({title: "Crimes added successfully", message: 'All the register has been added'});
+        setModalBody({title: "Crimen(es) agregado(s) exitosamente", message: 'La agregación ha sido exitosa'});
         if (errors.length > 0) {
             let errorText = "";
             errors.forEach(function (value, index) {
                 let rowNumber = index + 1;
                 // eslint-disable-next-line no-useless-concat
-                errorText = errorText + " Row: " + rowNumber + " " + "Id: " + value.id + ",";
+                errorText = errorText + " Fila: " + rowNumber + " " + "Id: " + value.id + ",";
             });
-            setModalBody({title: "Some aggregations has failed", message: 'The failed aggregations was: ' + errorText});
+            setModalBody({title: "Algunas agregaciones han fallado", message: 'Las agregaciones fallidas fueron: ' + errorText});
         }
 
     }
@@ -302,11 +302,11 @@ export default function Retrain() {
                 </div> : null
             }
             <Typography variant="h4">
-                Retrain IA
+                Re-entrenar IA
             </Typography>
             <div className={classes.headerContainer}>
                 <Typography variant="subtitle2" className={classes.paragraph} paragraph={true}>
-                    Crimes registered till date:
+                    Crimenes registrados hasta la fecha:
                 </Typography>
                 <div>
                     <Button variant="contained" color="primary" onClick={(e) => {
@@ -315,7 +315,7 @@ export default function Retrain() {
                     }}
                             style={{marginRight: 15}}>
                         <AddIcon/>
-                        Import .csv file
+                        Importar archivo .csv
                     </Button>
                     <input
                         id={"hiddenFileInput"}
@@ -327,11 +327,11 @@ export default function Retrain() {
                     <Button variant="contained" color="primary" onClick={() => setOpenDialog(true)}
                             style={{marginRight: 15}}>
                         <AddIcon/>
-                        Insert new crime
+                        Insertar nuevo crimen
                     </Button>
                     <Button variant="contained" color="primary" onClick={() => setOpenConfirmDialog(true)}>
                         <UpdateIcon/>
-                        Retrain IA
+                        Re-entrenar IA
                     </Button>
                 </div>
             </div>
@@ -356,10 +356,10 @@ export default function Retrain() {
                                 <CircularProgress/>
                             </div> : null
                         }
-                        <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+                        <DialogTitle id="form-dialog-title">Agregar</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                Input the data of the new crime
+                                Ingrese la información del crimen
                             </DialogContentText>
                             {showError ?
                                 <div>
@@ -372,7 +372,7 @@ export default function Retrain() {
                                 autoFocus
                                 margin="dense"
                                 id="crimeId"
-                                label="Crime Id"
+                                label="Id Crimen"
                                 type="number"
                                 fullWidth
                                 disabled={loading}
@@ -381,54 +381,52 @@ export default function Retrain() {
                                 }}
                             />
                             <FormControl className={classes.formControl}>
-                                <InputLabel id="demo-simple-select-label">Crime Type</InputLabel>
+                                <InputLabel id="demo-simple-select-label">Tipo de crimen</InputLabel>
                                 <Select
                                     labelId="crimeTypeSelect"
                                     id="crimeTypeSelect"
                                     value={crimeType}
                                     onChange={handleChangeSelect}
-                                    label="Crime Type"
+                                    label="Tipo de crimen"
                                 >
-                                    <MenuItem value={"ARSON"}>Arson</MenuItem>
-                                    <MenuItem value={"ASSAULT"}>Assault</MenuItem>
-                                    <MenuItem value={"BATTERY"}>Battery</MenuItem>
-                                    <MenuItem value={"BURGLARY"}>Burglary</MenuItem>
-                                    <MenuItem value={"CONCEALED CARRY LICENSE VIOLATION"}>Concealed Carry Permit
-                                        Violations</MenuItem>
-                                    <MenuItem value={"CRIM SEXUAL ASSAULT"}>Criminal Sexual Assault</MenuItem>
-                                    <MenuItem value={"CRIMINAL DAMAGE"}>Criminal Damage</MenuItem>
-                                    <MenuItem value={"CRIMINAL TRESPASS"}>Criminal Trespass</MenuItem>
-                                    <MenuItem value={"DECEPTIVE PRACTICE"}>Deceptive Practice</MenuItem>
-                                    <MenuItem value={"GAMBLING"}>Gambling</MenuItem>
-                                    <MenuItem value={"HOMICIDE"}>Homicide</MenuItem>
-                                    <MenuItem value={"HUMAN TRAFFICKING"}>Human Trafficking</MenuItem>
-                                    <MenuItem value={"INTERFERENCE WITH PUBLIC OFFICER"}>Interference With Public
-                                        Officer</MenuItem>
-                                    <MenuItem value={"INTIMIDATION"}>Intimidation</MenuItem>
-                                    <MenuItem value={"KIDNAPPING"}>Kidnapping</MenuItem>
-                                    <MenuItem value={"LIQUOR LAW VIOLATION"}>Liquor Law Violation</MenuItem>
-                                    <MenuItem value={"MOTOR VEHICLE THEFT"}>Motor Vehicle Theft</MenuItem>
-                                    <MenuItem value={"NARCOTICS"}>Narcotics</MenuItem>
-                                    <MenuItem value={"NON-CRIMINAL"}>Non Criminal</MenuItem>
-                                    <MenuItem value={"OBSCENITY"}>Obscenity</MenuItem>
-                                    <MenuItem value={"OFFENSE INVOLVING CHILDREN"}>Offense Involving Children</MenuItem>
-                                    <MenuItem value={"OTHER NARCOTIC VIOLATION"}>Other Narcotic Violation</MenuItem>
-                                    <MenuItem value={"OTHER OFFENSE"}>Other Offense</MenuItem>
-                                    <MenuItem value={"PROSTITUTION"}>Prostitution</MenuItem>
-                                    <MenuItem value={"PUBLIC INDECENCY"}>Public Indecency</MenuItem>
-                                    <MenuItem value={"PUBLIC PEACE VIOLATION"}>Public Peace Violation</MenuItem>
-                                    <MenuItem value={"ROBBERY"}>Robbery</MenuItem>
-                                    <MenuItem value={"SEX OFFENSE"}>Sex Offense</MenuItem>
-                                    <MenuItem value={"STALKING"}>Stalking</MenuItem>
-                                    <MenuItem value={"THEFT"}>Theft</MenuItem>
-                                    <MenuItem value={"WEAPONS VIOLATION"}>Weapons Violation</MenuItem>
+                                    <MenuItem value={"ARSON"}>Incendio provocado</MenuItem>
+                                    <MenuItem value={"ASSAULT"}>Asalto</MenuItem>
+                                    <MenuItem value={"BATTERY"}>Agresión</MenuItem>
+                                    <MenuItem value={"BURGLARY"}>Allanamiento de morada</MenuItem>
+                                    <MenuItem value={"CONCEALED CARRY LICENSE VIOLATION"}>Infracción de permiso de porte</MenuItem>
+                                    <MenuItem value={"CRIM SEXUAL ASSAULT"}>Asalto sexual</MenuItem>
+                                    <MenuItem value={"CRIMINAL DAMAGE"}>Daño a la propiedad</MenuItem>
+                                    <MenuItem value={"CRIMINAL TRESPASS"}>Invasión a propiedad privada</MenuItem>
+                                    <MenuItem value={"DECEPTIVE PRACTICE"}>Práctica engañosa</MenuItem>
+                                    <MenuItem value={"GAMBLING"}>Apuestas ilegales</MenuItem>
+                                    <MenuItem value={"HOMICIDE"}>Homicidio</MenuItem>
+                                    <MenuItem value={"HUMAN TRAFFICKING"}>Trata de personas</MenuItem>
+                                    <MenuItem value={"INTERFERENCE WITH PUBLIC OFFICER"}>Interferencia hacia un oficial</MenuItem>
+                                    <MenuItem value={"INTIMIDATION"}>Acoso</MenuItem>
+                                    <MenuItem value={"KIDNAPPING"}>Secuestro</MenuItem>
+                                    <MenuItem value={"LIQUOR LAW VIOLATION"}>Violación de la ley de licores</MenuItem>
+                                    <MenuItem value={"MOTOR VEHICLE THEFT"}>Robo Automóvil</MenuItem>
+                                    <MenuItem value={"NARCOTICS"}>Narcóticos</MenuItem>
+                                    <MenuItem value={"NON-CRIMINAL"}>No Criminal</MenuItem>
+                                    <MenuItem value={"OBSCENITY"}>Conducta obscena</MenuItem>
+                                    <MenuItem value={"OFFENSE INVOLVING CHILDREN"}>Ofensa a menores</MenuItem>
+                                    <MenuItem value={"OTHER NARCOTIC VIOLATION"}>Otras violaciones de narcóticos</MenuItem>
+                                    <MenuItem value={"OTHER OFFENSE"}>Otros delitos</MenuItem>
+                                    <MenuItem value={"PROSTITUTION"}>Prostitución</MenuItem>
+                                    <MenuItem value={"PUBLIC INDECENCY"}>Idencencia pública</MenuItem>
+                                    <MenuItem value={"PUBLIC PEACE VIOLATION"}>Alteración de la paz pública</MenuItem>
+                                    <MenuItem value={"ROBBERY"}>Hurto</MenuItem>
+                                    <MenuItem value={"SEX OFFENSE"}>Ofensa sexual</MenuItem>
+                                    <MenuItem value={"STALKING"}>Acoso</MenuItem>
+                                    <MenuItem value={"THEFT"}>Hurto</MenuItem>
+                                    <MenuItem value={"WEAPONS VIOLATION"}>Violación contra la ley de Armas</MenuItem>
                                 </Select>
                             </FormControl>
                             <TextField
                                 autoFocus
                                 margin="dense"
                                 id="caseNumber"
-                                label="Case number"
+                                label="Numero de caso"
                                 type="string"
                                 fullWidth
                                 disabled={loading}
@@ -440,7 +438,7 @@ export default function Retrain() {
                                 autoFocus
                                 margin="dense"
                                 id="districtNumber"
-                                label="District Number"
+                                label="Numero de distrito"
                                 type="number"
                                 fullWidth
                                 disabled={loading}
@@ -452,7 +450,7 @@ export default function Retrain() {
                                 autoFocus
                                 margin="dense"
                                 id="xCoordinate"
-                                label="X coordinate"
+                                label="Coordenada X"
                                 type="number"
                                 fullWidth
                                 disabled={loading}
@@ -464,7 +462,7 @@ export default function Retrain() {
                                 autoFocus
                                 margin="dense"
                                 id="yCoordinate"
-                                label="y coordinate"
+                                label="Coordenada Y"
                                 type="number"
                                 fullWidth
                                 disabled={loading}
@@ -475,10 +473,10 @@ export default function Retrain() {
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleCloseCreateDialog} color="primary" disabled={loading}>
-                                Cancel
+                                Cancelar
                             </Button>
                             <Button onClick={handleCreateDialog} color="primary" disabled={loading}>
-                                Create
+                                Agregar
                             </Button>
                         </DialogActions>
                     </Dialog>
@@ -497,10 +495,10 @@ export default function Retrain() {
                             <CircularProgress/>
                         </div> : null
                     }
-                    <DialogTitle id="alert-dialog-slide-title">{"You want to retrain de IA?"}</DialogTitle>
+                    <DialogTitle id="alert-dialog-slide-title">{"Desea re-entrenar la IA?"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-slide-description">
-                            Please confirm to continue
+                            Confirmar para continuar
                         </DialogContentText>
                         {showError ?
                             <div>
@@ -512,10 +510,10 @@ export default function Retrain() {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleCloseConfirmDialog} color="primary" disabled={loading}>
-                            Disagree
+                            Rechazar
                         </Button>
                         <Button onClick={handleCreateConfirmDialog} color="primary" disabled={loading}>
-                            Agree
+                            Aceptar
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -536,7 +534,7 @@ export default function Retrain() {
                     <DialogTitle id="alert-dialog-slide-title">{"You want to import this file?"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-slide-description">
-                            Please confirm to continue
+                            Confirmar para continuar
                         </DialogContentText>
                         {showError ?
                             <div>
@@ -548,10 +546,10 @@ export default function Retrain() {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleCloseConfirmCsvDialog} color="primary" disabled={loading}>
-                            Disagree
+                            Rechazar
                         </Button>
                         <Button onClick={handleCreateConfirmCsvDialog} color="primary" disabled={loading}>
-                            Agree
+                            Aceptar
                         </Button>
                     </DialogActions>
                 </Dialog>

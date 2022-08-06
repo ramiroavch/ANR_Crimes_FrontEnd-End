@@ -132,7 +132,7 @@ const Login = () => {
                         <LockOutlinedIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign in
+                        Inicio de Sesión
                     </Typography>
                     <form className={classes.form} noValidate onSubmit={validateLogin}>
                         <TextField
@@ -141,7 +141,7 @@ const Login = () => {
                             required
                             fullWidth
                             id="username"
-                            label="Username"
+                            label="Nombre de usuario"
                             name="username"
                             autoComplete="username"
                             autoFocus
@@ -153,7 +153,7 @@ const Login = () => {
                             required
                             fullWidth
                             name="password"
-                            label="Password"
+                            label="Contraseña"
                             type="password"
                             id="password"
                             autoComplete="current-password"
@@ -166,7 +166,7 @@ const Login = () => {
                             color="primary"
                             className={classes.submit}
                         >
-                            Sign In
+                            Iniciar Sesión
                         </Button>
                         {/*<Grid container>*/}
                         {/*    <Grid item xs>*/}

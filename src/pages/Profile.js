@@ -50,10 +50,10 @@ export default function Profile(){
                 "last_name":lastName,
                 "username":username
             }).then((data)=>{
-                setModalBody({title:"Changes saved",message:'Your Changes has been saved successfully'})
+                setModalBody({title:"Cambios guardados",message:'Los cambios han sido guardados exitosamente'})
                 setModal(true);
             }).catch((error)=>{
-                setModalBody({title:"Unexpected error making the prediction",message:error.message?? 'Unexpected error on server'})
+                setModalBody({title:"Error inesperado al editar",message:error.message?? 'Error inesperado en el servidor'})
                 setModal(true);
             })
         }
@@ -68,8 +68,7 @@ return(
         </div>
         <Card>
             <CardHeader
-                subheader="The information can be edited"
-                title="Profile"
+                title="Perfil"
             />
             <Divider />
             <CardContent>
@@ -84,7 +83,7 @@ return(
                     >
                         <TextField
                             fullWidth
-                            label="Username"
+                            label="Nombre de usuario"
                             name="username"
                             onChange={(event)=>{setUsername(event.target.value)}}
                             required
@@ -99,7 +98,7 @@ return(
                     >
                         <TextField
                             fullWidth
-                            label="First name"
+                            label="Nombre"
                             name="firstName"
                             onChange={(event)=>{setFirstName(event.target.value)}}
                             required
@@ -114,7 +113,7 @@ return(
                     >
                         <TextField
                             fullWidth
-                            label="Last name"
+                            label="Apellido"
                             name="lastName"
                             onChange={(event)=>{setLastName(event.target.value)}}
                             required
@@ -129,7 +128,7 @@ return(
                     >
                         <TextField
                             fullWidth
-                            label="Email Address"
+                            label="Correo"
                             name="email"
                             required
                             value={user.email}
@@ -152,7 +151,7 @@ return(
                     variant="contained"
                     onClick={handleUpdate}
                 >
-                    Update
+                    Guardar Cambios
                 </Button>
             </Box>
         </Card>
