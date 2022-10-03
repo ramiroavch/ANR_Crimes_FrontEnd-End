@@ -76,6 +76,7 @@ export default function PredictionMap() {
     const [modalBody, setModalBody] = useState({});
     const {accessToken} = useSelector((state) => state.user)
     const [crimeType, setCrimeType] = React.useState("");
+    const [districtNum, setDistrictNum] = React.useState("");
     const [openMap, setOpenMap] = React.useState(false);
     const classes = useStyles();
     const defaultCenter = {lat: 41.85003, lng: -87.65005};
@@ -87,8 +88,11 @@ export default function PredictionMap() {
     const handleChangeSelect = (event) => {
         setCrimeType(event.target.value);
     };
+    const handleChangeSelectDistrict = (event) => {
+        setDistrictNum(event.target.value);
+    };
     const handlePrediction = () => {
-        if (typeof crimeType != 'undefined') {
+        if ((typeof crimeType != 'undefined') && (typeof districtNum != 'undefined') ){
             let values = ['primary_type_ARSON', 'primary_type_ASSAULT', 'primary_type_BATTERY', 'primary_type_BURGLARY',
                 'primary_type_CONCEALED CARRY LICENSE VIOLATION', 'primary_type_CRIM SEXUAL ASSAULT', 'primary_type_CRIMINAL DAMAGE',
                 'primary_type_CRIMINAL TRESPASS', 'primary_type_DECEPTIVE PRACTICE', 'primary_type_GAMBLING', 'primary_type_HOMICIDE',
@@ -99,17 +103,29 @@ export default function PredictionMap() {
                 'primary_type_OTHER OFFENSE', 'primary_type_PROSTITUTION', 'primary_type_PUBLIC INDECENCY', 'primary_type_PUBLIC PEACE VIOLATION',
                 'primary_type_ROBBERY', 'primary_type_SEX OFFENSE', 'primary_type_STALKING', 'primary_type_THEFT', 'primary_type_WEAPONS VIOLATION'
             ]
+            let districtIndexes = ['district_1.0','district_2.0','district_3.0','district_4.0','district_5.0','district_6.0','district_7.0',
+                'district_8.0','district_9.0','district_10.0','district_11.0','district_12.0','district_14.0','district_15.0',
+                'district_16.0','district_17.0','district_18.0','district_19.0','district_22.0','district_24.0',
+                'district_25.0','district_31.0']
             let request = {};
             const currentDate = new Date();
             const value = moment(currentDate).format("yyyy-MM-DD HH:mm:ss");
             request["date"] = value;
-            values.forEach(function (type, indice, array) {
+            values.forEach(function (type, index, array) {
                 if (type === crimeType) {
                     request[type] = 1
                 } else {
                     request[type] = 0
                 }
             });
+            districtIndexes.forEach(function(district,index,array){
+                if(district === districtNum) {
+                    request[district] = 1
+                } else {
+                    request[district] = 0
+                }
+            });
+            console.log(JSON.stringify(request));
             axios.post('/api/ml/predict/', request,
                 {
                     headers: {Authorization: `Bearer ${accessToken}`}
@@ -186,6 +202,40 @@ export default function PredictionMap() {
                     <MenuItem value={"primary_type_STALKING"}>Acoso</MenuItem>
                     <MenuItem value={"primary_type_THEFT"}>Hurto</MenuItem>
                     <MenuItem value={"primary_type_WEAPONS VIOLATION"}>Violación contra la ley de Armas</MenuItem>
+                </Select>
+            </FormControl>
+            <FormControl className={classes.formControl}>
+                <Select
+                    labelId="disctrictNumSelect"
+                    id="disctrictNumSelect"
+                    value={districtNum}
+                    onChange={handleChangeSelectDistrict}
+                    label="Distrito"
+                >
+                    <MenuItem value={"district_1.0"}>1</MenuItem>
+                    <MenuItem value={"district_2.0"}>2</MenuItem>
+                    <MenuItem value={"district_3.0"}>3</MenuItem>
+                    <MenuItem value={"district_4.0"}>4</MenuItem>
+                    <MenuItem value={"district_5.0"}>5</MenuItem>
+                    <MenuItem value={"district_6.0"}>6</MenuItem>
+                    <MenuItem value={"district_7.0"}>7</MenuItem>
+                    <MenuItem value={"district_8.0"}>8</MenuItem>
+                    <MenuItem value={"district_9.0"}>9</MenuItem>
+                    <MenuItem value={"district_10.0"}>10</MenuItem>
+                    <MenuItem value={"district_11.0"}>11</MenuItem>
+                    <MenuItem value={"district_12.0"}>12</MenuItem>
+                    <MenuItem value={"district_14.0"}>14</MenuItem>
+                    <MenuItem value={"district_15.0"}>15</MenuItem>
+                    <MenuItem value={"district_16.0"}>16</MenuItem>
+                    <MenuItem value={"district_17.0"}>17</MenuItem>
+                    <MenuItem value={"district_18.0"}>18</MenuItem>
+                    <MenuItem value={"district_19.0"}>19</MenuItem>
+                    <MenuItem value={"district_20.0"}>20</MenuItem>
+                    <MenuItem value={"district_22.0"}>22</MenuItem>
+                    <MenuItem value={"district_24.0"}>24</MenuItem>
+                    <MenuItem value={"district_25.0"}>25</MenuItem>
+                    <MenuItem value={"district_31.0"}>31</MenuItem>
+
                 </Select>
             </FormControl>
             {
