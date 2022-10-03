@@ -105,7 +105,7 @@ export default function PredictionMap() {
             ]
             let districtIndexes = ['district_1.0','district_2.0','district_3.0','district_4.0','district_5.0','district_6.0','district_7.0',
                 'district_8.0','district_9.0','district_10.0','district_11.0','district_12.0','district_14.0','district_15.0',
-                'district_16.0','district_17.0','district_18.0','district_19.0','district_22.0','district_24.0',
+                'district_16.0','district_17.0','district_18.0','district_19.0','district_20.0','district_22.0','district_24.0',
                 'district_25.0','district_31.0']
             let request = {};
             const currentDate = new Date();
