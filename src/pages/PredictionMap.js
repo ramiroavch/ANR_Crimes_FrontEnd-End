@@ -205,12 +205,13 @@ export default function PredictionMap() {
                 </Select>
             </FormControl>
             <FormControl className={classes.formControl}>
+                <InputLabel id="demo-simple-select-outlined-label">Nro. Distrito</InputLabel>
                 <Select
                     labelId="disctrictNumSelect"
                     id="disctrictNumSelect"
                     value={districtNum}
                     onChange={handleChangeSelectDistrict}
-                    label="Distrito"
+                    label="Nro. Distrito"
                 >
                     <MenuItem value={"district_1.0"}>1</MenuItem>
                     <MenuItem value={"district_2.0"}>2</MenuItem>
